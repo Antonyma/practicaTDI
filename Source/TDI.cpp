@@ -14,36 +14,48 @@ void aplicarCanny(C_Image imagen) {
 	imagenGaussiana.Gaussian((float)desviacion); // Matriz gaussiana con derivacion aplicada
 	for (int i = imagen.FirstRow(); i <= imagen.LastRow(); i++) {
 		for (int j = imagen.FirstCol(); j <= imagen.LastCol(); j++) {
-			if (i >= imagen.FirstRow() && i <= imagen.LastRow() && j >= imagen.FirstCol() && j <= imagen.LastCol()) {
-				//cout << "i: " << i << ", j: " << j << endl;
-				imagenGaussiana(i, j) = imagen(i, j);
-			}
+			//cout << "i: " << i << ", j: " << j << endl;
+			imagenGaussiana(i, j) = imagen(i, j);
 		}
 	}
 	
 	// Paso 2: Calcular el gradiente de la imagen
 	
-	//m.Gradient();
+	C_Matrix matrizGaussiana(imagenGaussiana);
+	C_Image imagenBordes(imagenGaussiana);
+	imagenBordes.Gradient(imagenGaussiana);
+
+	for (int i = imagenGaussiana.FirstRow(); i <= imagenGaussiana.LastRow(); i++) {
+		for (int j = imagenGaussiana.FirstCol(); j <= imagenGaussiana.LastCol(); j++) {
+			matrizGaussiana(i, j) = imagenGaussiana(i, j);
+		}
+	}
+
+	matrizGaussiana.Write("prueba");
 	// Paso 3: Supresión no máxima
 
 	// Paso 4: Umbralización con histéresis
 
 	// Paso 5: Dibujar los bordes en la imagen resultante
-	imagenGaussiana.WriteBMP("prueba.bmp"); //imagen negra, no filtra
+	imagenGaussiana.WriteBMP("prueba.bmp"); 
+	imagenBordes.WriteBMP("prueba2.bmp");
 } 
 
 
-int Test(int argc, char** argv);
 int main(int argc, char** argv){
 	C_Image imagen;
 
-	if (!C_FileExists("Hercules.bmp"))
-		cout << "\nError, el fichero no existe"; //Compruebo si el nombre de la imagen existe y de no existir lanzo un error diciendo que esa imagen no existe
+	std::string nombreImagen;
+	std::cout << "Ingrese el nombre de la imagen de entrada: ";
+	std::cin >> nombreImagen;
+
+	nombreImagen += ".bmp";
+
+	if (!C_FileExists(nombreImagen.c_str()))
+		cout << "\nError, el fichero no existe"; //Compruebo si el nombre de la imagen existe 
 	else
 	{
-		imagen.ReadBMP("Hercules.bmp");
-		//return Test(argc, argv);
-		C_Image imagen2(imagen.FirstRow(), imagen.LastRow(), imagen.FirstCol(), imagen.LastCol());
+		imagen.ReadBMP(nombreImagen.c_str());
 		cout << "Dimensiones de la imagen: " << imagen.LastRow() - imagen.FirstRow() + 1 << " x " << imagen.LastCol() - imagen.FirstCol() + 1 << endl;
 		imagen.Grey();
 		aplicarCanny(imagen);
