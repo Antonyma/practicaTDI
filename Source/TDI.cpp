@@ -117,16 +117,17 @@ void aplicarCanny(C_Image imagen) {
     
 
     // Paso 4: Umbralización con histéresis    
-    int umbralMin = 30;
-    int umbralMax = 120;
+    int umbralMin = 10;
+    int umbralMax = 20;
     C_Image imagenBordesFinales(imagenSuprimida);
-    umbralizacionConHist(imagenSuprimida, umbralMin, umbralMax);
+    umbralizacionConHist(imagenBordesFinales, umbralMin, umbralMax);
     
     // Paso 5: Dibujar los bordes en la imagen resultante
-    imagenGaussiana.WriteBMP("prueba.bmp");
-    imagenBordes.WriteBMP("prueba2.bmp");
-    imagenSuprimida.WriteBMP("prueba3.bmp");
-    imagenBordesFinales.WriteBMP("prueba4.bmp");
+    imagen.WriteBMP("test1_Gris.bmp");
+    imagenGaussiana.WriteBMP("test2_FiltroGaussiano.bmp");
+    imagenBordes.WriteBMP("test3_Bordes.bmp");
+    imagenSuprimida.WriteBMP("test4_SupresionNoMaximo.bmp");
+    imagenBordesFinales.WriteBMP("test5_Umbralizado.bmp");
 }
 
 int main(int argc, char** argv) {
