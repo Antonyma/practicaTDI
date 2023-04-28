@@ -1,11 +1,7 @@
 #include <iostream>
-#include <C_General.hpp>
-#include <C_Trace.hpp>
 #include <C_File.hpp>
-#include <C_Arguments.hpp>
 #include <C_Matrix.hpp>
 #include <C_Image.hpp>
-#include "TDI.h"
 
 void suprimirNoMaximos(C_Image& imagenBordes, C_Matrix& matrizGaussiana, C_Image& imagenSuprimida) {
     // Excluye los píxeles de los bordes para asegurar que los píxeles que se comparan tengan vecinos en todas las direcciones
@@ -117,8 +113,11 @@ void aplicarCanny(C_Image imagen) {
     
 
     // Paso 4: Umbralización con histéresis    
-    int umbralMin = 10;
-    int umbralMax = 20;
+    int umbralMin, umbralMax;
+    std::cout << "Introduce el valor de umbral minimo: ";
+    std::cin >> umbralMin;
+    std::cout << "Introduce el valor de umbral maximo: ";
+    std::cin >> umbralMax;
     C_Image imagenBordesFinales(imagenSuprimida);
     umbralizacionConHist(imagenBordesFinales, umbralMin, umbralMax);
     
