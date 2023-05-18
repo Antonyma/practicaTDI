@@ -4,7 +4,7 @@
 #include <C_Image.hpp>
 
 void suprimirNoMaximos(C_Image& imagenBordes, C_Matrix& matrizGaussiana, C_Image& imagenSuprimida) {
-    // Excluye los píxeles de los bordes para asegurar que los píxeles que se comparan tengan vecinos en todas las direcciones
+    // Excluye los pï¿½xeles de los bordes para asegurar que los pï¿½xeles que se comparan tengan vecinos en todas las direcciones
     // Bucle comienza en FirstRow()+1 y FirstCol()+1 y termina en LastRow()-1 y LastCol()-1
     for (int i = imagenBordes.FirstRow() + 1; i < imagenBordes.LastRow() - 1; i++) {
         for (int j = imagenBordes.FirstCol() + 1; j < imagenBordes.LastCol() - 1; j++) {
@@ -12,22 +12,22 @@ void suprimirNoMaximos(C_Image& imagenBordes, C_Matrix& matrizGaussiana, C_Image
 
             double valorDirGrad, valorDirOpGrad, valorActual;
 
-            // Dirección horizontal
+            // Direcciï¿½n horizontal
             if ((theta > -22.5 && theta <= 22.5) || (theta > 157.5 && theta <= -157.5)) {
                 valorDirGrad = imagenBordes(i, j + 1);
                 valorDirOpGrad = imagenBordes(i, j - 1);
             }
-            // Dirección diagonal superior derecha e inferior izquierda
+            // Direcciï¿½n diagonal superior derecha e inferior izquierda
             else if ((theta > 22.5 && theta <= 67.5) || (theta > -157.5 && theta <= -112.5)) {
                 valorDirGrad = imagenBordes(i + 1, j - 1);
                 valorDirOpGrad = imagenBordes(i - 1, j + 1);
             }
-            // Dirección vertical
+            // Direcciï¿½n vertical
             else if ((theta > 67.5 && theta <= 112.5) || (theta > -112.5 && theta <= -67.5)) {
                 valorDirGrad = imagenBordes(i + 1, j);
                 valorDirOpGrad = imagenBordes(i - 1, j);
             }
-            //Dirección diagonal superior izquierda e inferior derecha
+            //Direcciï¿½n diagonal superior izquierda e inferior derecha
             else {
                 valorDirGrad = imagenBordes(i - 1, j - 1);
                 valorDirOpGrad = imagenBordes(i + 1, j + 1);
@@ -66,7 +66,7 @@ void umbralizacionConHist(C_Image& imagenSuprimida, int& umbralMin, int& umbralM
                 for (int x = i - 1; x <= i + 1; x++) {
                     for (int y = j - 1; y <= j + 1; y++) {
                          
-                        // Comprueba que (x, y) estan dentro de los límites de la imagen y si su valor es mayor que el umbralMax
+                        // Comprueba que (x, y) estan dentro de los lï¿½mites de la imagen y si su valor es mayor que el umbralMax
                         if (x >= imagenSuprimida.FirstRow() && x <= imagenSuprimida.LastRow() && y >= imagenSuprimida.FirstCol() && y <= imagenSuprimida.LastCol() && imagenSuprimida(x, y) > umbralMax) {
                             pixelVecinoMayor = true;
                             break;
@@ -86,22 +86,19 @@ void umbralizacionConHist(C_Image& imagenSuprimida, int& umbralMin, int& umbralM
     }
 }
 
-void aplicarCanny(C_Image& imagen) {
+void aplicarCanny(C_Image & imagen) {
     double desviacion;
-    C_Image imagenGaussiana(imagen);
-    
+    C_Matrix matrizImagen(imagen), matrizGaussiana(-1, 1, -1, 1);
+
     // Suavizar la imagen con un filtro gaussiano
     cout << "\nPaso 2: Suavizar imagen con filtro gaussiano (Valor recomendado entre 0.5 - 1.50)";
     std::cout << "\nIntroduce el valor de la desviacion: ";
     std::cin >> desviacion;
-    
-    imagenGaussiana.Gaussian((float)desviacion); 
-    // Recorre la imagen y guarda el valor de cada pixel en la imagen Gaussiana 
-    for (int i = imagen.FirstRow(); i <= imagen.LastRow(); i++) {
-        for (int j = imagen.FirstCol(); j <= imagen.LastCol(); j++) {
-            imagenGaussiana(i, j) = imagen(i, j);
-        }
-    }
+
+    matrizGaussiana.Gaussian((float)desviacion);
+    matrizImagen.Convolution(matrizImagen, matrizGaussiana);
+    C_Image imagenGaussiana(matrizImagen, 256);
+
     imagenGaussiana.WriteBMP("test2_FiltroGaussiano.bmp");
 
     cout << "\nImagen guardada con nombre test2_FiltroGaussiano" << endl;
@@ -109,29 +106,28 @@ void aplicarCanny(C_Image& imagen) {
     // Calcular el gradiente de la imagen
     // Guardas la imagen en la matriz Gaussiana 
     C_Image imagenBordes;
-    C_Matrix matrizGaussiana(imagenGaussiana);
 
     cout << "\nPaso 3: Calculo de bordes utilizando el gradiente";
 
-    imagenBordes.Gradient(matrizGaussiana);
+    imagenBordes.Gradient(matrizImagen);
     imagenBordes.WriteBMP("test3_Bordes.bmp");
 
     cout << "\nImagen guardada con nombre test3_Bordes" << endl;
 
-    // Paso 3: Supresión no máxima
+    // Paso 3: Supresion no maxima
     C_Image imagenSuprimida(imagenBordes);
 
     cout << "\nPaso 4: Supresion de no maximos de la imagen";
 
-    suprimirNoMaximos(imagenBordes, matrizGaussiana, imagenSuprimida);
+    suprimirNoMaximos(imagenBordes, matrizImagen, imagenSuprimida);
     imagenSuprimida.WriteBMP("test4_SupresionNoMaximo.bmp");
     
     cout << "\nImagen guardada con nombre test4_SupresionNoMaximo" << endl;
 
-    // Paso 4: Umbralización con histéresis    
+    // Paso 4: Umbralizacion con histeresis    
     int umbralMin, umbralMax;
 
-    cout << "\nPaso 5: Umbralización con histeresis, se reccomienda empezar con valores bajos y ajustarlos gradualmente hasta obtener un resultado satisfactorio";
+    cout << "\nPaso 5: Umbralizaciï¿½n con histeresis, se reccomienda empezar con valores bajos y ajustarlos gradualmente hasta obtener un resultado satisfactorio";
     std::cout << "\nIntroduce el valor de umbral minimo (Ej: 10): ";
     std::cin >> umbralMin;
     std::cout << "\nIntroduce el valor de umbral maximo (Ej: 30): ";

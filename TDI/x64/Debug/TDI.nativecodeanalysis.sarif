@@ -1,0 +1,75 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "PREfast Code Analysis",
+          "version": "14.35.32217.1",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/users/anton/source/repos/practicatdi/source/tdi.cpp"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "b96899f743a3d1d95ae75e554a5fc3d844c7bc4b2666aee887993b16cb7bc255"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/anton/source/repos/practicatdi/include/c_file.hpp"
+          },
+          "hashes": {
+            "sha-256": "039fcf1c6098f8353dd99462dbd6d615ce13e4cd535b739454c7dd334127b5f7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/anton/source/repos/practicatdi/include/c_general.hpp"
+          },
+          "hashes": {
+            "sha-256": "bc91c52f8f8b8f34ae5f7c21f002e55d35d40565debd67717cac785ccc9bed90"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/anton/source/repos/practicatdi/include/c_matrix.hpp"
+          },
+          "hashes": {
+            "sha-256": "0a59f6acfd10878668cd5a71b9d3cc2e9a1b381a5caa6ddfcb2764c140e87b1b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/anton/source/repos/practicatdi/include/c_trace.hpp"
+          },
+          "hashes": {
+            "sha-256": "fdaf7b81bab999a724c5b4676682242bb724a986c4d6b65b5c5a06bccc96ddf8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/users/anton/source/repos/practicatdi/include/c_image.hpp"
+          },
+          "hashes": {
+            "sha-256": "19613f68354d72d2b569c8bf805ee6f562acc72fcf43f985065e76bb62ce61b8"
+          }
+        }
+      ]
+    }
+  ]
+}
